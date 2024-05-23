@@ -6,8 +6,8 @@ import CustomLoader from '../custom/CustomLoader'
 const bgColors = ["#FFE5B4", "#C8E6D7", "#FDCCD1", "#D3DDB5", "#D4D5EA", "#FFE9A4"]
 
 function Homepage() {
+    const [loading, setLoading] = useState(true)
     const [users, setUsers] = useState(null)
-    const [isLoading, setIsLoading] = useState(true)
     const [uname, setUname] = useState("")
     const [note, setNote] = useState("")
     const [reRender, setReRender] = useState(new Date().getTime())
@@ -22,15 +22,18 @@ function Homepage() {
     }
 
     useEffect(() => {
-        setIsLoading(true)
-        setTimeout(() => {
-            getAllUsers(setUsers, setIsLoading)
-        }, 750);
+        getAllUsers(setUsers, setLoading, false)
     }, [reRender])
+
+    useEffect(() => {
+        setTimeout(() => {
+            getAllUsers(setUsers, setLoading)
+        }, 750);
+    }, [])
 
     return (
         <>
-            {isLoading
+            {loading
                 ? <CustomLoader />
                 : <div className='flex items-center justify-center gap-x-3 w-full h-full p-4'>
                     <div className='flex flex-col justify-start h-full w-3/5 items-start gap-y-4 p-4 rounded-md overflow-y-auto'

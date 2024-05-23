@@ -19,14 +19,17 @@ export const userPost = async (payload, setReRender) => {
         })
 }
 
-export const getAllUsers = async (setData, setLoading) => {
-    setLoading(true)
-    await api.get('/user')
-        .then(response => {
-            setData(response.data?.users)
-            setLoading(false)
-        }).catch(err => {
-            Toast.error(err?.response?.data?.message)
-            setLoading(false)
-        })
+export const getAllUsers = async (setData, setLoading, showLoader = true) => {
+    if (showLoader)
+        setLoading(true)
+    try {
+        const response = await api.get('/user');
+        setData(response.data?.users);
+    } catch (err) {
+        Toast.error(err?.response?.data?.message);
+    } finally {
+        if (showLoader) {
+            setLoading(false);
+        }
+    }
 }
